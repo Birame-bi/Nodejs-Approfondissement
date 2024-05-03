@@ -5,19 +5,24 @@ class UserService {
   getAll() {
     return User.find({}, "-password");
   }
+
   get(id) {
     return User.findById(id, "-password");
   }
+
   create(data) {
     const user = new User(data);
     return user.save();
   }
+
   update(id, data) {
     return User.findByIdAndUpdate(id, data, { new: true });
   }
+
   delete(id) {
     return User.deleteOne({ _id: id });
   }
+
   async checkPasswordUser(email, password) {
     const user = await User.findOne({ email });
     if (!user) {
@@ -29,6 +34,13 @@ class UserService {
     }
     return user._id;
   }
+
+  // Nouvelle méthode pour récupérer les données de l'utilisateur actuellement authentifié
+  async getUserById(id) {
+    // Utiliser la méthode get() existante pour récupérer l'utilisateur
+    return User.findById(id, "-password");
+  }
 }
 
 module.exports = new UserService();
+
