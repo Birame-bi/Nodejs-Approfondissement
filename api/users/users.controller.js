@@ -1,8 +1,8 @@
 const NotFoundError = require("../../errors/not-found");
-const UnauthorizedError = require("../../errors/unauthorized");
-const jwt = require("jsonwebtoken");
-const config = require("../../config");
-const usersService = require("./users.service");
+const UnauthorizedError = require("../../errors/unauthorized"); 
+const jwt = require("jsonwebtoken"); 
+const config = require("../../config"); 
+const usersService = require("./users.service"); 
 
 class UsersController {
   async getAll(req, res, next) {
@@ -13,6 +13,7 @@ class UsersController {
       next(err);
     }
   }
+
   async getById(req, res, next) {
     try {
       const id = req.params.id;
@@ -25,6 +26,7 @@ class UsersController {
       next(err);
     }
   }
+
   async create(req, res, next) {
     try {
       const user = await usersService.create(req.body);
@@ -35,6 +37,7 @@ class UsersController {
       next(err);
     }
   }
+
   async update(req, res, next) {
     try {
       const id = req.params.id;
@@ -46,6 +49,7 @@ class UsersController {
       next(err);
     }
   }
+
   async delete(req, res, next) {
     try {
       const id = req.params.id;
@@ -56,6 +60,7 @@ class UsersController {
       next(err);
     }
   }
+
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
@@ -73,6 +78,23 @@ class UsersController {
       next(err);
     }
   }
+
+  // méthode me pour récupérer les informations de l'utilisateur actuellement authentifié
+  async me(req, res, next) {
+    try {
+      // Utiliser req.user qui contient l'identifiant de l'utilisateur
+      const userId = req.user.id;
+
+      // Utiliser la méthode get() du service pour récupérer l'utilisateur
+      const user = await usersService.get(userId);
+
+      // Envoyer les données de l'utilisateur au client au format JSON
+      res.json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
-module.exports = new UsersController();
+module.exports = new UsersController(); // Exportation de l'instance de UsersController
+
